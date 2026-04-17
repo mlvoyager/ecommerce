@@ -1,0 +1,127 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-3">Dashboard administrateur</h3>
+    <p class="text-muted mb-4">Vue d’ensemble de l’activité sur Julia-Shop.</p>
+
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Produits</h6>
+                    <h3 class="text-success">{{ nb_products }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Catégories</h6>
+                    <h3 class="text-success">{{ nb_categories }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Commandes</h6>
+                    <h3 class="text-success">{{ nb_orders }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Revenus totaux</h6>
+                    <h3 class="text-success">{{ revenue|floatformat:2 }} MAD</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Avis produits</h6>
+                    <p class="mb-1">Nombre d’avis : <strong>{{ nb_ratings }}</strong></p>
+                    <p class="mb-0">Note moyenne produits : 
+                        <strong>{{ avg_product_rating|floatformat:1 }}/5</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Évaluation de l’application</h6>
+                    <p class="mb-1">Nombre d’avis : <strong>{{ nb_app_evals }}</strong></p>
+                    <p class="mb-0">Note moyenne application :
+                        <strong>{{ avg_app_rating|floatformat:1 }}/5</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6 mb-3">
+            <h5>Dernières commandes</h5>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered bg-white">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Client</th>
+                            <th>Montant</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for o in last_orders %}
+                            <tr>
+                                <td>{{ o.id }}</td>
+                                <td>{{ o.name }}</td>
+                                <td>{{ o.total }} MAD</td>
+                                <td>{{ o.created_at|date:"d/m/Y H:i" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">Aucune commande pour le moment.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <h5>Top produits vendus</h5>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered bg-white">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Produit</th>
+                            <th>Quantité vendue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in top_products %}
+                            <tr>
+                                <td>{{ p.title }}</td>
+                                <td>{{ p.total_sold|default:0 }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="2" class="text-center text-muted">Pas encore de ventes.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

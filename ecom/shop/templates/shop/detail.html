@@ -1,0 +1,74 @@
+{% extends 'shop/base.html'%}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+            <img src="{{ product.image }}" class="card-img-top" style="max-height: 500px; object-fit: contain;">
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <h2 class="mb-2">{{ product.title }}</h2>
+
+        <div class="rating-stars mb-2">
+            {% with avg=average|default:0 %}
+                {% with avg_int=avg|floatformat:0 %}
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= avg_int|add:"0" %}
+                            <i class="fa fa-star"></i>
+                        {% else %}
+                            <i class="fa-regular fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                    <small class="text-muted ml-1">({{ avg|floatformat:1 }}/5, {{ ratings|length }} avis)</small>
+                {% endwith %}
+            {% endwith %}
+        </div>
+
+        <div class="text-success h4 font-weight-bold mb-3">Prix : {{ product.price }} MAD</div>
+        <div class="mb-3">{{ product.description }}</div>
+        <button class="btn btn-success">Acheter</button>
+
+        <hr class="mt-4">
+
+        <h5 class="mb-3">Donnez votre avis</h5>
+        <form method="post" class="mb-3">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="rating">Votre note :</label>
+                <select name="rating" id="rating" class="form-control form-control-sm w-50">
+                    {% for i in "12345" %}
+                        <option value="{{ forloop.counter }}">{{ forloop.counter }} étoile(s)</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success btn-sm">Envoyer ma note</button>
+        </form>
+
+        <h5 class="mt-4 mb-2">Avis récents</h5>
+        <div>
+            {% if ratings %}
+                <ul class="list-unstyled">
+                    {% for r in ratings %}
+                        <li class="mb-2">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= r.stars %}
+                                    <i class="fa fa-star"></i>
+                                {% else %}
+                                    <i class="fa-regular fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                            <small class="text-muted ml-1">{{ r.created_at|date:"d/m/Y H:i" }}</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">Aucun avis pour ce produit pour le moment. Soyez le premier à le noter !</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

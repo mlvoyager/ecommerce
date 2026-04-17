@@ -1,0 +1,242 @@
+{% extends "shop/base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <form class="card card-sm shadow-sm border-0 mt-3 mb-3">
+            <div class="card-body row no-gutters align-items-center">
+                <div class="col">
+                <input type="search" placeholder="Rechercher un produit (comme sur Jumia)" name="item-name" class="form-control form-control-borderless"></div>
+                 <div class="col-auto"><button type="submit" class="btn btn-success">Rechercher</button></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    {% for product in product_objet %}
+    <div class="col-md-3">
+        <div class="card mb-4 shadow-sm border-0">
+            <img src="{{product.image}}" alt="" class="card-img-top">
+            <div class="card-body">
+            <div  id="title{{ product.id}}" class="card-title font-weight-bold">{{product.title}}</div>
+            <div class="rating-stars mb-1">
+                {% with avg=product.average_rating|default:0 %}
+                    {% with avg_int=avg|floatformat:0 %}
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= avg_int|add:"0" %}
+                                <i class="fa fa-star"></i>
+                            {% else %}
+                                <i class="fa-regular fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                        <small class="text-muted">({{ avg|floatformat:1 }}/5)</small>
+                    {% endwith %}
+                {% endwith %}
+            </div>
+            <div id="price{{ product.id }}" class="card-text text-success font-weight-bold">{{product.price}} MAD</div>
+            <a href="{% url 'detail' product.id %}" class="btn btn-outline-success btn-sm mt-2">Voir produit</a> 
+        <button id="{{product.id}}" class="btn ted btn-success btn-sm mt-2 float-right">Ajouter au panier</button></div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="row mt-3">
+    <div class="col-md-3 offset-md-4">
+        <ul class="pagination">
+            {% if product_objet.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ product_objet.previous_page_number }}">Precedent</a>
+            </li>
+            {% endif %}
+
+            <li class="page-item active"><a class="page-link" href="?page={{ product_objet.number}}"></a></li>
+            
+             {% if product_objet.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ product_objet.next_page_number }}">Suivant</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+<div class="jumbotron jumbotron-fluid bg-white mt-4 py-5 shadow-sm border rounded">
+  <div class="container">
+    <h1 class="display-5 text-success mb-3">À propos de Julia-Shop</h1>
+    <p class="lead">
+      Julia-Shop est une place de marché en ligne pensée pour les clients modernes qui recherchent la simplicité, la
+      transparence et la confiance.notre plateforme met en avant une interface claire,
+      rapide et 100% responsive, afin que vous puissiez acheter en toute sérénité, où que vous soyez.
+    </p>
+    <hr>
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <h5 class="text-success">Notre mission</h5>
+        <p>
+          Notre mission est de connecter les clients à une sélection de produits de qualité, au meilleur rapport
+          qualité‑prix, tout en offrant une expérience d’achat fluide du premier clic jusqu’à la confirmation de commande.
+          Nous voulons que chaque visite sur Julia-Shop soit simple, agréable et efficace.
+        </p>
+        <h5 class="text-success mt-4">Notre promesse</h5>
+        <p>
+          Sur Julia-Shop, vous trouvez des fiches produits claires, des prix affichés en toute transparence, un panier
+          intuitif, un processus de commande rapide et un module de paiement sécurisé (simulé dans cette version).
+          Chaque détail de l’interface est pensé pour vous faire gagner du temps.
+        </p>
+      </div>
+      <div class="col-md-6">
+        <h5 class="text-success">Une expérience inspirée de Jumia, en vert</h5>
+        <p>
+          Nous avons choisi le vert comme couleur principale pour symboliser la confiance, la croissance et l’énergie
+          positive. L’interface reprend les codes des grandes plateformes e‑commerce (barre de recherche, cartes produits,
+          panier, catégories, avis clients) tout en affichant une identité Julia-Shop propre et moderne.
+        </p>
+        <h5 class="text-success mt-4">Avis et amélioration continue</h5>
+        <p>
+          Le système de notation par étoiles sur les produits, ainsi que l’évaluation globale de l’application, sont au
+          cœur de notre démarche qualité. Vos retours nous permettent d’identifier ce qui fonctionne, ce qui doit évoluer
+          et d’améliorer en continu l’expérience Julia-Shop, comme une véritable plateforme professionnelle.
+        </p>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-md-4">
+        <h6 class="text-success">Parcours d’achat complet</h6>
+        <p>
+          De la découverte des produits au paiement, tout le parcours est intégré : recherche, filtrage par catégories,
+          ajout au panier, validation de la commande et paiement simulé.
+        </p>
+      </div>
+      <div class="col-md-4">
+        <h6 class="text-success">Technologie moderne</h6>
+        <p>
+          Julia-Shop repose sur Django côté serveur, avec une gestion du panier en JavaScript via <code>localStorage</code>,
+          une structure de base de données claire (produits, catégories, commandes, avis) et des templates responsive.
+        </p>
+      </div>
+      <div class="col-md-4">
+        <h6 class="text-success">Vision à long terme</h6>
+        <p>
+          Cette version pose les bases d’un vrai site e‑commerce : intégration future de moyens de paiement réels,
+          gestion de comptes clients, suivi de commandes et tableau de bord vendeur sont des évolutions naturelles
+          envisagées pour Julia-Shop.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="chatbox">
+
+    <div id="messages"></div>
+
+    <input type="text" id="message">
+
+    <button onclick="sendMessage()">Envoyer</button>
+
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">console.log('Juste pour tester');
+
+    if (localStorage.getItem('panier') ==null){
+        var panier = {};
+    }else{
+        panier = JSON.parse(localStorage.getItem('panier')); // localStorage stocke uniquement du texte, il nous faut JSON.PARSE pour le transformer en fichier JSON
+    }
+    document.getElementById("panier").innerHTML = "Panier("+ Object.keys(panier).length+")";
+    $(document).on('click','.ted', function() {
+        console.log('ajouter');
+        var item_id = this.id.toString();
+        console.log("Produit ajouté :", item_id);
+        if (panier[item_id]!= undefined){
+            panier[item_id] = panier[item_id] +1;
+        }else{
+            panier[item_id] = 1;
+        }
+        console.log(panier);
+         
+       localStorage.setItem('panier', JSON.stringify(panier));
+       document.getElementById("panier").innerHTML = "Panier("+ Object.keys(panier).length+")";
+   
+    });
+    $(function () {
+  $('[data-toggle="popover"]').popover()
+  document.getElementById('panier').setAttribute('data-content', "<h5>Votre panier est vide</h5>")
+});
+AfficherList(panier)
+function AfficherList(panier){
+    var panierString = " ";
+    panierString +="<h5>Voici votre liste</h5>";
+    var index = 1;
+    for (var x in panier){
+        panierString+=index;
+        var title = document.getElementById("title"+ x).innerHTML;
+        var price = document.getElementById("price"+ x).innerHTML;
+        panierString += " - " + title + " ("+ price +")  Qte: "+ panier[x] +"</br>";
+        index+=1;
+    }
+     $('[data-toggle="popover"]').popover()
+  document.getElementById('panier').setAttribute('data-content',panierString);
+
+}
+
+
+function getCookie(name) {
+let cookieValue = null;
+
+if (document.cookie && document.cookie !== '') {
+
+const cookies = document.cookie.split(';');
+
+for (let i = 0; i < cookies.length; i++) {
+
+const cookie = cookies[i].trim();
+
+if (cookie.substring(0, name.length + 1) === (name + '=')) {
+
+cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+
+break;
+
+}
+
+}
+
+}
+
+return cookieValue;
+}
+
+function sendMessage(){
+
+let message = document.getElementById("message").value
+
+fetch("/chatbot/",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"X-CSRFToken":getCookie("csrftoken")
+},
+body:JSON.stringify({
+message:message
+})
+})
+
+.then(response => response.json())
+
+.then(data =>{
+
+let messages = document.getElementById("messages")
+
+messages.innerHTML += "<p><b>Vous :</b>"+message+"</p>"
+
+messages.innerHTML += "<p><b>Bot :</b>"+data.reply+"</p>"
+
+})
+
+}
+
+
+</script>
+{% endblock %}

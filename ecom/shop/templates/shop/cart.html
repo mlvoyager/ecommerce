@@ -1,0 +1,93 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-3">Votre panier</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm bg-white">
+            <thead class="thead-light">
+                <tr>
+                    <th>Produit</th>
+                    <th>Prix</th>
+                    <th>Quantité</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="cart-body">
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="h5">Total : <span id="cart-total">0 MAD</span></div>
+        <a href="{% url 'checkout' %}" class="btn btn-success">Passer la commande</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    // Données produits depuis Django pour pouvoir afficher titre/prix
+    var PRODUCTS = {
+        {% for p in products %}
+        "{{ p.id }}": {
+            "title": "{{ p.title|escapejs }}",
+            "price": {{ p.price }},
+            "image": "{{ p.image|escapejs }}"
+        },
+        {% endfor %}
+    };
+
+    function loadCart() {
+        var panier = {};
+        if (localStorage.getItem('panier') != null) {
+            panier = JSON.parse(localStorage.getItem('panier'));
+        }
+        var tbody = document.getElementById('cart-body');
+        tbody.innerHTML = '';
+        var total = 0;
+
+        for (var id in panier) {
+            var qty = panier[id];
+            if (!PRODUCTS[id]) {
+                continue;
+            }
+            var p = PRODUCTS[id];
+            var lineTotal = p.price * qty;
+            total += lineTotal;
+
+            var tr = document.createElement('tr');
+            tr.innerHTML =
+                '<td>' + p.title + '</td>' +
+                '<td>' + p.price.toFixed(2) + ' MAD</td>' +
+                '<td>' + qty + '</td>' +
+                '<td>' + lineTotal.toFixed(2) + ' MAD</td>' +
+                '<td><button class="btn btn-sm btn-danger" onclick="removeFromCart(' + id + ')">Supprimer</button></td>';
+            tbody.appendChild(tr);
+        }
+
+        document.getElementById('cart-total').innerHTML = total.toFixed(2) + ' MAD';
+
+        // Met à jour le bouton panier dans le header si présent
+        if (document.getElementById("panier")) {
+            document.getElementById("panier").innerHTML = "Panier (" + Object.keys(panier).length + ")";
+        }
+    }
+
+    function removeFromCart(id) {
+        var panier = {};
+        if (localStorage.getItem('panier') != null) {
+            panier = JSON.parse(localStorage.getItem('panier'));
+        }
+        delete panier[id];
+        localStorage.setItem('panier', JSON.stringify(panier));
+        loadCart();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        loadCart();
+    });
+</script>
+{% endblock %}
+
+

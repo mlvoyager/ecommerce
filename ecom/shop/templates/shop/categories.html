@@ -1,0 +1,72 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-3">Catégories</h3>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group mb-3">
+                <a href="{% url 'categories' %}" class="list-group-item list-group-item-action {% if not selected_category %}active{% endif %}">
+                    Toutes les catégories
+                </a>
+                {% for c in categories %}
+                    <a href="{% url 'categories' %}?category={{ c.id }}" class="list-group-item list-group-item-action {% if selected_category and c.id == selected_category.id %}active{% endif %}">
+                        {{ c.name }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-9">
+            <h5 class="mb-3">
+                {% if selected_category %}
+                    Produits dans la catégorie : <span class="text-success">{{ selected_category.name }}</span>
+                {% else %}
+                    Tous les produits
+                {% endif %}
+            </h5>
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-4">
+                        <div class="card mb-4 shadow-sm border-0">
+                            <img src="{{ product.image }}" class="card-img-top" alt="">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ product.title }}</h6>
+                                <div class="card-text text-success font-weight-bold mb-2">{{ product.price }} MAD</div>
+                                <a href="{% url 'detail' product.id %}" class="btn btn-outline-success btn-sm">Voir produit</a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <p class="text-muted">Aucun produit trouvé pour cette catégorie.</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6 offset-md-3">
+                    <ul class="pagination justify-content-center">
+                        {% if products.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{% if selected_category %}category={{ selected_category.id }}&{% endif %}page={{ products.previous_page_number }}">Précédent</a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item active">
+                            <a class="page-link" href="#">{{ products.number }}</a>
+                        </li>
+
+                        {% if products.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{% if selected_category %}category={{ selected_category.id }}&{% endif %}page={{ products.next_page_number }}">Suivant</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

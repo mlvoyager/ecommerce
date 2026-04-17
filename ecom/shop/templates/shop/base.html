@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Julia Shop</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Icônes pour les étoiles de notation -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkTt93dKcfQfVQX2INePvu5jv7jqXQdYdAtzCk7eA2Lf0CwK8q+X7xYKg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- Avant la fermeture du </body> -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            background-color: #f8fafb;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-jumia {
+            background: #ffffff;
+            color: #28a745;
+            border-radius: 50px;
+            padding: 2px 10px;
+            font-size: 11px;
+            border: 1px solid #e0f4e5;
+        }
+
+        .btn-primary-jumia {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-primary-jumia:hover {
+            background-color: #1f8237;
+            border-color: #1f8237;
+        }
+
+        .navbar-light .navbar-nav .nav-link {
+            font-weight: 500;
+        }
+
+        .rating-stars i {
+            color: #ffc107;
+        }
+
+        /* Style amélioré pour le carrousel */
+        .carousel-section {
+            margin-top: 20px;
+            margin-bottom: 30px;
+            padding: 0 15px;
+        }
+        
+        .custom-carousel {
+            width: 100%;
+            max-width: 1200px;
+            height: 450px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .custom-carousel .carousel-inner {
+            height: 100%;
+        }
+        
+        .custom-carousel .carousel-inner img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+        }
+        
+        /* Ajustement responsive pour mobile */
+        @media (max-width: 768px) {
+            .custom-carousel {
+                height: 250px;
+            }
+            .custom-carousel .carousel-inner img {
+                height: 250px;
+            }
+        }
+        
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: rgba(40, 167, 69, 0.5);
+            border-radius: 50%;
+            padding: 20px;
+            background-size: 50%;
+        }
+        
+        .carousel-control-prev:hover .carousel-control-prev-icon,
+        .carousel-control-next:hover .carousel-control-next-icon {
+            background-color: rgba(40, 167, 69, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <!-- SECTION CARROUSSEL - Placé en haut de la page pour mettre en valeur les produits -->
+    <div class="carousel-section">
+        <div id="carouselExampleControls" class="carousel slide custom-carousel" data-ride="carousel" data-interval="2000" data-pause="false">
+            <div class="carousel-inner">
+                {% for product in product_objet %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img src="{{ product.image }}" class="d-block w-100" alt="{{ product.title }}">
+                </div>
+                {% endfor %}
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Précédent</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Suivant</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-white">
+        <div class="row">
+            <div class="col-md-12 px-0">
+                <nav class="navbar navbar-expand-lg navbar-light bg-white">
+                    <a class="navbar-brand text-success" href="/">Julia-Shop</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link text-success" href="/">Accueil <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'app_evaluation' %}">Évaluer l'application</a>
+                            </li>
+                            <li class="nav-item">
+                                <button id="panier" type="button" class="btn btn-primary-jumia text-white" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="" onclick="window.location.href='{% url 'cart' %}'">
+                                    Panier (0)
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'categories' %}">Catégories</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    {% block content %}
+    {% endblock %}
+    
+</body>
+{% block js %}
+{% endblock %}
+</html>

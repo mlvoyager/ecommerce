@@ -1,0 +1,22 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h3 class="text-success mb-3">Merci pour votre commande !</h3>
+    <p>Votre commande numéro <strong>#{{ order.id }}</strong> a été enregistrée.</p>
+    <p>Montant total : <strong>{{ order.total }} MAD</strong></p>
+    <a href="{% url 'home' %}" class="btn btn-success mt-3">Retour à l'accueil</a>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    // On vide le panier local après une commande réussie
+    localStorage.removeItem('panier');
+    if (document.getElementById("panier")) {
+        document.getElementById("panier").innerHTML = "Panier (0)";
+    }
+</script>
+{% endblock %}
+
+

@@ -1,0 +1,80 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-3">Évaluer l'application</h3>
+
+    <div class="mb-3">
+        {% if average_app %}
+            <div class="rating-stars mb-1">
+                {% with avg=average_app %}
+                    {% with avg_int=avg|floatformat:0 %}
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= avg_int|add:"0" %}
+                                <i class="fa fa-star"></i>
+                            {% else %}
+                                <i class="fa-regular fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                        <small class="text-muted ml-1">Moyenne : {{ avg|floatformat:1 }}/5</small>
+                    {% endwith %}
+                {% endwith %}
+            </div>
+        {% else %}
+            <p class="text-muted">Aucune évaluation pour le moment.</p>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h5>Laissez votre avis</h5>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="rating">Votre note</label>
+                    <select name="rating" id="rating" class="form-control form-control-sm w-50">
+                        {% for i in "12345" %}
+                            <option value="{{ forloop.counter }}">{{ forloop.counter }} étoile(s)</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Commentaire</label>
+                    <textarea name="comment" id="comment" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email (optionnel)</label>
+                    <input type="email" name="email" id="email" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-success btn-sm">Envoyer mon avis</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <h5>Avis récents</h5>
+            {% if evaluations %}
+                <ul class="list-unstyled">
+                    {% for e in evaluations %}
+                        <li class="mb-3">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= e.stars %}
+                                    <i class="fa fa-star"></i>
+                                {% else %}
+                                    <i class="fa-regular fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                            <small class="text-muted ml-1">{{ e.created_at|date:"d/m/Y H:i" }}</small>
+                            {% if e.comment %}
+                                <div>{{ e.comment }}</div>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">Pas encore d'avis.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
