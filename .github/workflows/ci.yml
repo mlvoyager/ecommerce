@@ -28,3 +28,7 @@ jobs:
       - name: Django check
         working-directory: ecom
         run: python manage.py check
+
+      - name: Run tests
+        working-directory: ecom
+        run: python manage.py test
