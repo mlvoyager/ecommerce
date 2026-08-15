@@ -1,0 +1,5 @@
+Django==5.2.12
+django-jazzmin==3.0.3
+nltk==3.9.3
+transformers==5.3.0
+torch==2.10.0
