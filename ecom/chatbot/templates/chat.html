@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 50px auto; padding: 20px; }
+        #chat-box { border: 1px solid #ccc; height: 400px; overflow-y: auto; padding: 10px; margin-bottom: 10px; }
+        input { width: 80%; padding: 10px; }
+        button { padding: 10px 20px; }
+        .user { color: blue; }
+        .bot { color: green; }
+    </style>
+</head>
+<body>
+    <h1>🤖 Mon Chatbot</h1>
+    
+    <div id="chat-box"></div>
+    
+    <input type="text" id="message" placeholder="Votre message...">
+    <button onclick="envoyer()">Envoyer</button>
+
+    <script>
+        async function envoyer() {
+            let message = document.getElementById('message').value;
+            if (!message) return;
+            
+            // Afficher message utilisateur
+            document.getElementById('chat-box').innerHTML += `<p class="user"><b>Vous:</b> ${message}</p>`;
+            document.getElementById('message').value = '';
+            
+            // Envoyer au serveur
+            let response = await fetch('/repondre/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: message})
+            });
+            
+            let data = await response.json();
+            
+            // Afficher réponse
+            document.getElementById('chat-box').innerHTML += `<p class="bot"><b>Bot:</b> ${data.reponse}</p>`;
+        }
+    </script>
+</body>
+</html>

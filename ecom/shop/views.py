@@ -5,19 +5,9 @@ from django.core.paginator import Paginator
 from django.db.models import Sum, Avg, Count
 from django.http import JsonResponse
 import json
-from .chatbot import simple_bot
 
-def chatbot(request):
 
-    if request.method == "POST":
 
-        data = json.loads(request.body)
-
-        message = data["message"]
-
-        reply = simple_bot(message)
-
-        return JsonResponse({"reply": reply})
 
 def index(request):
     product_objet = Product.objects.all()

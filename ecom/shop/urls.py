@@ -8,7 +8,7 @@ from shop.views import (
     app_evaluation,
     categories_view,
     admin_dashboard,
-    chatbot,
+    
 )
 
 
@@ -21,5 +21,5 @@ urlpatterns = [
     
     path('categories/', categories_view, name="categories"),
     path('admin-dashboard/', admin_dashboard, name="admin_dashboard"),
-    path('chatbot/', chatbot, name='chatbot'),
+    
 ]
